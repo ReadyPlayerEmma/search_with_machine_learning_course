@@ -90,7 +90,7 @@ mappings =  [
 def get_opensearch():
 
     host = 'localhost'
-    port = 9200
+    port = 9202
     auth = ('admin', 'admin')
     client = OpenSearch(
         hosts=[{'host': host, 'port': port}],

@@ -1,38 +1,41 @@
 version: '3'
 services:
-  opensearch-node1:
+  opensearch-ltr-node1:
     image: gsingers/opensearch-learning-to-rank:2.1.0
-    container_name: opensearch-node1
+    container_name: opensearch-ltr-node1
     environment:
       - discovery.type=single-node
       - http.max_content_length=1000mb
-      - "OPENSEARCH_JAVA_OPTS=-Xms4G -Xmx4G"
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
 
     volumes:
-      - opensearch-data1:/usr/share/opensearch/data  #todo: figure this out so we can have persistent storage
+      - opensearch-ltr-data1:/usr/share/opensearch/data  #todo: figure this out so we can have persistent storage
     ports:
-      - 9200:9200
-      - 9600:9600 # required for Performance Analyzer
+      - 9202:9200
+      - 9602:9600 # required for Performance Analyzer
+    expose:
+      - "9200"
     networks:
-      - opensearch-net
+      - opensearch-ltr-net
   
-  opensearch-dashboards:
+  opensearch-ltr-dashboards:
     image: opensearchproject/opensearch-dashboards:2.5.0
+    container_name: opensearch-ltr-dashboards
     ports:
-      - 5601:5601
+      - 5602:5601
     expose:
       - "5601"
     environment:
-      OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
+      OPENSEARCH_HOSTS: '["https://opensearch-ltr-node1:9200"]'
     depends_on:
-      - opensearch-node1
+      - opensearch-ltr-node1
     networks:
-      - opensearch-net
+      - opensearch-ltr-net
 
 
 volumes:
-  opensearch-data1:
+  opensearch-ltr-data1:
 
 networks:
-  opensearch-net:
+  opensearch-ltr-net:
     driver: bridge

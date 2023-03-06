@@ -6,12 +6,13 @@ from numpy.random import RandomState
 import pandas as pd
 import query_utils as qu
 from opensearchpy import RequestError
+from opensearchpy.client import OpenSearch
 import os
 
 # from importlib import reload
 
 class DataPrepper:
-    opensearch = None
+    opensearch: OpenSearch
     index_name = "bbuy_products"
     ltr_store_name = "week1"
     train_random_state = RandomState(256)
@@ -239,17 +240,55 @@ class DataPrepper:
         print("IMPLEMENT ME: __log_ltr_query_features: Extract log features out of the LTR:EXT response and place in a data frame")
         # Loop over the hits structure returned by running `log_query` and then extract out the features from the response per query_id and doc id.  Also capture and return all query/doc pairs that didn't return features
         # Your structure should look like the data frame below
+
+        try:
+            response = self.opensearch.search(index=self.index_name, body=log_query)
+        except RequestError as re:
+            print(f"Error logging LTR query features:\n{log_query}\n{re}")
+            raise re
+
+        hits = response['hits']['hits']
+
         feature_results = {}
         feature_results["doc_id"] = []  # capture the doc id so we can join later
         feature_results["query_id"] = []  # ^^^
         feature_results["sku"] = []
         feature_results["name_match"] = []
-        rng = np.random.default_rng(12345)
-        for doc_id in query_doc_ids:
-            feature_results["doc_id"].append(doc_id)  # capture the doc id so we can join later
+        # rng = np.random.default_rng(12345)
+        # for doc_id in query_doc_ids:
+        #     feature_results["doc_id"].append(doc_id)  # capture the doc id so we can join later
+        #     feature_results["query_id"].append(query_id)
+        #     feature_results["sku"].append(doc_id)  
+        #     feature_results["name_match"].append(rng.random())
+
+
+        for hit in hits:
+            feature_results["doc_id"].append(hit["_id"])  # capture the doc id so we can join later
             feature_results["query_id"].append(query_id)
-            feature_results["sku"].append(doc_id)  
-            feature_results["name_match"].append(rng.random())
+            feature_results["sku"].append(hit["_source"]["sku"])
+            features = hit["fields"]["_ltrlog"][0]["log_entry"]
+            for feature in features:
+                if feature["name"] == "title_match":
+                    feature_results["name_match"].append(feature["value"])
+                elif feature["name"] == "shortDescription_match":
+                    feature_results["shortDescription_match"].append(feature["value"])
+                elif feature["name"] == "longDescription_match":
+                    feature_results["longDescription_match"].append(feature["value"])
+                elif feature["name"] == "onsale_function":
+                    feature_results["onsale_function"].append(feature["value"])
+                elif feature["name"] == "short_term_rank_function":
+                    feature_results["short_term_rank_function"].append(feature["value"])
+                elif feature["name"] == "medium_term_rank_function":
+                    feature_results["medium_term_rank_function"].append(feature["value"])
+                elif feature["name"] == "long_term_rank_function":
+                    feature_results["long_term_rank_function"].append(feature["value"])
+                elif feature["name"] == "sale_price_function":
+                    feature_results["sale_price_function"].append(feature["value"])
+                elif feature["name"] == "price_function":
+                    feature_results["price_function"].append(feature["value"])
+                else:
+                    print("Unknown feature: %s" % feature["name"])
+
         frame = pd.DataFrame(feature_results)
         return frame.astype({'doc_id': 'int64', 'query_id': 'int64', 'sku': 'int64'})
         # IMPLEMENT_END

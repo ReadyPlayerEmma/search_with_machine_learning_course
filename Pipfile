@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+opensearch-py = "*"
+requests = "*"
+ipython = "*"
+urljoin = "*"
+xgboost = "*"
+pandas = "*"
+numpy = "*"
+numba = "*"
+numexpr = "*"
+sklearn = "*"
+graphviz = "*"
+matplotlib = "*"
+fasttext = "*"
+nltk = "*"
+kaggle = "*"
+lxml = "*"
+sentence-transformers = "*"
+
+[dev-packages]
+autopep8 = "*"
+
+[requires]
+python_version = "3.10"

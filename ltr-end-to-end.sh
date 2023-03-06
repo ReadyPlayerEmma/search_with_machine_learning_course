@@ -5,10 +5,12 @@ usage()
   exit 2
 }
 
-SOURCE_DIR="/workspace/search_with_machine_learning_course"
+CWD=$(pwd)
+
+SOURCE_DIR="${CWD}"
 WEEK="week1"
-OUTPUT_DIR="/workspace/ltr_output"
-ALL_CLICKS_FILE="/workspace/datasets/train.csv"
+OUTPUT_DIR="${CWD}/ltr_output"
+ALL_CLICKS_FILE="${CWD}/datasets/train.csv"
 SPLIT_TRAIN_ROWS=1000000
 SPLIT_TEST_ROWS=1000000
 NUM_TEST_QUERIES=100 # the number of test queries to run

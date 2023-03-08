@@ -9,7 +9,7 @@ services:
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
 
     volumes:
-      - opensearch-ltr-data1:/usr/share/opensearch/data  #todo: figure this out so we can have persistent storage
+      - /workspace/opensearch:/usr/share/opensearch/data
     ports:
       - 9202:9200
       - 9602:9600 # required for Performance Analyzer

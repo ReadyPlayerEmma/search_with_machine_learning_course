@@ -20,7 +20,7 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('popular')
 
 host = 'localhost'
-port = 9202
+port = 9200
 auth = ('admin', 'admin')  # For testing only. Don't store credentials in code.
 
 # Create the client with SSL/TLS enabled, but hostname and certificate verification disabled.

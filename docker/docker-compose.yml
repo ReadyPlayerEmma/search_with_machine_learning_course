@@ -11,8 +11,8 @@ services:
     volumes:
       - /workspace/opensearch:/usr/share/opensearch/data
     ports:
-      - 9202:9200
-      - 9602:9600 # required for Performance Analyzer
+      - 9200:9200
+      - 9600:9600 # required for Performance Analyzer
     expose:
       - "9200"
     networks:
@@ -22,7 +22,7 @@ services:
     image: opensearchproject/opensearch-dashboards:2.5.0
     container_name: opensearch-ltr-dashboards
     ports:
-      - 5602:5601
+      - 5601:5601
     expose:
       - "5601"
     environment:

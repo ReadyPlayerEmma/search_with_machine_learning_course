@@ -24,7 +24,7 @@ from opensearchpy import OpenSearch
 
 if __name__ == "__main__":
     host = 'localhost'
-    port = 9202
+    port = 9200
     auth = ('admin', 'admin')  # For testing only. Don't store credentials in code.
     parser = argparse.ArgumentParser(description='Build LTR.')
     # TODO: setup argparse requirements/dependencies to better enforce arguments that require other arguments
@@ -33,7 +33,7 @@ if __name__ == "__main__":
                          help='The name of the main index to search')
     general.add_argument("-s", '--host', default="localhost",
                          help='The OpenSearch host name')
-    general.add_argument("-p", '--port', type=int, default=9202,
+    general.add_argument("-p", '--port', type=int, default=9200,
                          help='The OpenSearch port')
     general.add_argument('--user',
                          help='The OpenSearch admin.  If this is set, the program will prompt for password too. If not set, use default of admin/admin')

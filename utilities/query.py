@@ -200,7 +200,7 @@ def search(client, user_query, index="bbuy_products", sort="_score", sortDir="de
 
 if __name__ == "__main__":
     host = 'localhost'
-    port = 9202
+    port = 9200
     auth = ('admin', 'admin')  # For testing only. Don't store credentials in code.
     parser = argparse.ArgumentParser(description='Build LTR.')
     general = parser.add_argument_group("general")
@@ -208,7 +208,7 @@ if __name__ == "__main__":
                          help='The name of the main index to search')
     general.add_argument("-s", '--host', default="localhost",
                          help='The OpenSearch host name')
-    general.add_argument("-p", '--port', type=int, default=9202,
+    general.add_argument("-p", '--port', type=int, default=9200,
                          help='The OpenSearch port')
     general.add_argument('--user',
                          help='The OpenSearch admin.  If this is set, the program will prompt for password too. If not set, use default of admin/admin')
